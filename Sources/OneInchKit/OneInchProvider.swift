@@ -14,9 +14,6 @@ class OneInchProvider {
 
     private let networkManager: NetworkManager
     private let chain: Chain
-    private let headers: HTTPHeaders = [
-        HTTPHeader(name: "Authorization", value: "Bearer eJ6FPSDW5z2vKD6oEcjQwnzFzvQ6nXgZ"),
-    ]
 
     private var url: String { "https://api.1inch.dev/swap/" }
     private var headers: HTTPHeaders?
