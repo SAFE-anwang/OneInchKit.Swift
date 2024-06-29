@@ -67,7 +67,7 @@ class OneInchTransactionDecorator {
 }
 
 extension OneInchTransactionDecorator: ITransactionDecorator {
-    public func decoration(from: Address?, to: Address?, value: BigUInt?, contractMethod: ContractMethod?, internalTransactions: [InternalTransaction], eventInstances: [ContractEventInstance]) -> TransactionDecoration? {
+    public func decoration(from: Address?, to: Address?, value: BigUInt?, contractMethod: ContractMethod?, internalTransactions: [InternalTransaction], eventInstances: [ContractEventInstance], isLock: Bool) -> TransactionDecoration? {
         guard let from, let to, let value, let contractMethod else {
             return nil
         }
