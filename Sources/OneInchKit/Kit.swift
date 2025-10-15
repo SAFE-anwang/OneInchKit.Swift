@@ -12,7 +12,8 @@ public class Kit {
 }
 
 public extension Kit {
-    func quote(networkManager: NetworkManager, chain: Chain, fromToken: Address, toToken: Address, amount: BigUInt, protocols: String? = nil, gasPrice: GasPrice? = nil, complexityLevel: Int? = nil,
+    func quote(networkManager: NetworkManager, chain: Chain, fromToken: Address, toToken: Address, amount: BigUInt,
+               fee: Decimal? = nil, protocols: String? = nil, gasPrice: GasPrice? = nil, complexityLevel: Int? = nil,
                connectorTokens: String? = nil, gasLimit: Int? = nil, mainRouteParts: Int? = nil, parts: Int? = nil) async throws -> Quote
     {
         try await provider.quote(
@@ -21,6 +22,7 @@ public extension Kit {
             fromToken: fromToken,
             toToken: toToken,
             amount: amount,
+            fee: fee,
             protocols: protocols,
             gasPrice: gasPrice,
             complexityLevel: complexityLevel,
@@ -31,7 +33,8 @@ public extension Kit {
         )
     }
 
-    func swap(networkManager: NetworkManager, chain: Chain, receiveAddress: Address, fromToken: Address, toToken: Address, amount: BigUInt, slippage: Decimal, protocols: [String]? = nil, recipient: Address? = nil,
+    func swap(networkManager: NetworkManager, chain: Chain, receiveAddress: Address, fromToken: Address, toToken: Address,
+              amount: BigUInt, slippage: Decimal, referrer: String? = nil, fee: Decimal? = nil, protocols: [String]? = nil, recipient: Address? = nil,
               gasPrice: GasPrice? = nil, burnChi: Bool? = nil, complexityLevel: Int? = nil, connectorTokens: [String]? = nil,
               allowPartialFill: Bool? = nil, gasLimit: Int? = nil, mainRouteParts: Int? = nil, parts: Int? = nil) async throws -> Swap
     {
@@ -43,6 +46,8 @@ public extension Kit {
             amount: amount,
             fromAddress: receiveAddress.hex,
             slippage: slippage,
+            referrer: referrer,
+            fee: fee,
             protocols: protocols?.joined(separator: ","),
             recipient: recipient?.hex,
             gasPrice: gasPrice,
@@ -68,9 +73,9 @@ public extension Kit {
     }
 
     static func routerAddress(chain: Chain) throws -> Address {
-        switch chain.id {
-        case 1, 10, 56, 100, 137, 250, 42161, 43114: return try Address(hex: "0x1111111254EEB25477B68fb85Ed929f73A960582")
-        case 3, 4, 5, 42: return try Address(hex: "0x11111112542d85b3ef69ae05771c2dccff4faa26")
+        switch chain {
+        case .ethereum, .optimism, .binanceSmartChain, .gnosis, .polygon, .fantom, .base, .arbitrumOne, .avalanche: return try Address(hex: "0x1111111254EEB25477B68fb85Ed929f73A960582")
+        case .ethereumRopsten, .ethereumRinkeby, .ethereumGoerli, .ethereumKovan: return try Address(hex: "0x11111112542d85b3ef69ae05771c2dccff4faa26")
         default: throw UnsupportedChainError.noRouterAddress
         }
     }
